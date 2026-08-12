@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cargolith Dispatching | Official Website</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- React & Babel CDNs -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@600;700;800;900&family=Space+Grotesk:wght@500;700;900&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            cargolith: {
+              navy: '#0A1B3A',
+              darkNavy: '#050E21',
+              blue: '#1E40AF',
+              steel: '#2563EB',
+              cyan: '#0284C7',
+              lightBlue: '#EBF3FF',
+              silver: '#D9E2EC',
+              darkSilver: '#8E9AAF',
+            }
+          },
+          fontFamily: {
+            heading: ['Outfit', 'sans-serif'],
+            body: ['Plus Jakarta Sans', 'sans-serif'],
+            mono: ['Space Grotesk', 'monospace']
+          },
+          backgroundImage: {
+            'hero-radial': 'radial-gradient(circle at 50% 0%, rgba(30, 64, 175, 0.08) 0%, transparent 75%)'
+          },
+          boxShadow: {
+            'chrome': '0 10px 30px -5px rgba(10, 27, 58, 0.12)',
+            'float': '0 20px 40px -10px rgba(10, 27, 58, 0.15)',
+            'badge': '0 4px 20px rgba(10, 27, 58, 0.1)'
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #FFFFFF; color: #0A1B3A; }
+    h1, h2, h3, h4, .font-heading { font-family: 'Outfit', sans-serif; }
+
+    .btn-cargolith {
+      background: linear-gradient(135deg, #0A1B3A 0%, #1E40AF 100%);
+      color: #FFFFFF;
+      font-weight: 800;
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 14px rgba(10, 27, 58, 0.25);
+    }
+    .btn-cargolith:hover {
+      background: linear-gradient(135deg, #1E40AF 0%, #2563EB 100%);
+      transform: translateY(-1px);
+      box-shadow: 0 8px 25px rgba(30, 64, 175, 0.35);
+    }
+
+    .btn-silver {
+      background: linear-gradient(135deg, #FFFFFF 0%, #F8FAFC 50%, #E2E8F0 100%);
+      color: #0A1B3A;
+      font-weight: 700;
+      border: 1px solid #CBD5E1;
+      transition: all 0.2s ease;
+    }
+    .btn-silver:hover {
+      background: linear-gradient(135deg, #F8FAFC 0%, #E2E8F0 50%, #CBD5E1 100%);
+      border-color: #94A3B8;
+      color: #1E40AF;
+    }
+
+    .card-cargolith {
+      background: #FFFFFF;
+      border: 1px solid #E2E8F0;
+      border-radius: 1.25rem;
+      transition: all 0.3s ease;
+    }
+    .card-cargolith:hover {
+      border-color: #93C5FD;
+      box-shadow: 0 16px 35px -5px rgba(10, 27, 58, 0.1);
+    }
+
+    /* CLD Monogram Styling */
+    .cld-silver {
+      background: linear-gradient(135deg, #94A3B8 0%, #CBD5E1 40%, #64748B 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 2px 4px rgba(148, 163, 184, 0.4));
+    }
+    .cld-navy {
+      color: #0A1B3A;
+      text-shadow: 0 2px 4px rgba(10, 27, 58, 0.2);
+    }
+    .cld-contrast {
+      background: linear-gradient(135deg, #2563EB 0%, #0284C7 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 2px 6px rgba(37, 99, 235, 0.4));
+    }
+  </style>
+</head>
+<body class="bg-white text-cargolith-navy antialiased">
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState } = React;
+    const LOGO_FILE_URI = "file:///C:/Users/hp/.gemini/antigravity/brain/9270a6f7-a63d-4244-8388-35de5674e9c4/.user_uploaded/media__1785017332609.jpg";
+    const API_BASE_URL = "https://cargolith-backend.onrender.com";
+
+    function CLDMonogramBadge() {
+      return (
+        <div className="inline-flex items-center gap-1 px-4 py-1.5 rounded-2xl bg-white border-2 border-slate-200/90 shadow-badge hover:shadow-lg transition-all duration-300 transform hover:-translate-y-0.5">
+          <span className="font-heading font-black text-3xl sm:text-4xl tracking-tighter cld-silver">C</span>
+          <span className="font-heading font-black text-3xl sm:text-4xl tracking-tighter cld-navy">L</span>
+          <span className="font-heading font-black text-3xl sm:text-4xl tracking-tighter cld-contrast">D</span>
+          <span className="ml-2 text-[10px] font-extrabold uppercase tracking-widest text-slate-400 border-l border-slate-200 pl-2 hidden sm:inline">
+            Cargolith Dispatch
+          </span>
+        </div>
+      );
+    }
+
+    function App() {
+      const [tab, setTab] = useState('home');
+      
+      const [miles, setMiles] = useState(2800);
+      const [equipType, setEquipType] = useState('Dry Van');
+      const rates = { 'Dry Van': 2.85, 'Reefer': 3.35, 'Flatbed': 3.50, 'Step Deck': 3.75 };
+      const currentRPM = rates[equipType] || 2.85;
+      const grossRev = Math.round(miles * currentRPM);
+      const fee = Math.round(grossRev * 0.05);
+      const netTakeHome = grossRev - fee;
+
+      const [step, setStep] = useState(1);
+      const [isSubmitting, setIsSubmitting] = useState(false);
+      const [formSubmitted, setFormSubmitted] = useState(false);
+      const [formData, setFormData] = useState({
+        name: '', mc: '', dot: '', equip: 'Dry Van (53ft)', location: '', lanes: '', phone: '', email: ''
+      });
+
+      const [contactData, setContactData] = useState({ name: '', email: '', phone: '', message: '' });
+      const [contactSubmitted, setContactSubmitted] = useState(false);
+
+      const [openFaq, setOpenFaq] = useState(0);
+
+      const liveLoads = [
+        { id: 'LD-4091', origin: 'Chicago, IL', dest: 'Atlanta, GA', miles: 716, rate: '$2,300', rpm: '$3.21/mi', equip: "53' Dry Van" },
+        { id: 'LD-4092', origin: 'Dallas, TX', dest: 'Charlotte, NC', miles: 1040, rate: '$3,600', rpm: '$3.46/mi', equip: "53' Reefer" },
+        { id: 'LD-4093', origin: 'Columbus, OH', dest: 'Harrisburg, PA', miles: 382, rate: '$1,450', rpm: '$3.79/mi', equip: "48' Flatbed" },
+        { id: 'LD-4094', origin: 'Memphis, TN', dest: 'Jacksonville, FL', miles: 680, rate: '$2,250', rpm: '$3.30/mi', equip: "53' Dry Van" },
+      ];
+
+      const handleOnboardSubmit = async (e) => {
+        e.preventDefault();
+        setIsSubmitting(true);
+        try {
+          await fetch(`${API_BASE_URL}/api/onboard`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formData)
+          });
+        } catch (err) {
+          console.warn('API submission fallback:', err);
+        } finally {
+          setIsSubmitting(false);
+          setFormSubmitted(true);
+        }
+      };
+
+      const handleContactSubmit = async (e) => {
+        e.preventDefault();
+        try {
+          await fetch(`${API_BASE_URL}/api/contact`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(contactData)
+          });
+        } catch (err) {
+          console.warn('Contact submission fallback:', err);
+        } finally {
+          setContactSubmitted(true);
+        }
+      };
+
+      return (
+        <div className="min-h-screen flex flex-col justify-between bg-white text-cargolith-navy">
+          
+          <div className="bg-cargolith-darkNavy text-white text-xs py-2.5 px-4 text-center font-semibold flex items-center justify-center gap-2 border-b border-cargolith-navy">
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span className="tracking-wide">DAT Verified & FMCSA Registered Dispatch Desk</span>
+            <span className="hidden sm:inline text-cargolith-darkSilver">•</span>
+            <span className="hidden sm:inline text-cargolith-silver">No Upfront Fees — Pay Only When You Haul</span>
+            <a href="tel:18005558782" className="ml-2 underline hover:text-cargolith-silver font-bold">Call: 1-800-CARGOLITH</a>
+          </div>
+
+          <header className="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-slate-200 py-3 px-4 sm:px-8 shadow-sm">
+            <div className="max-w-7xl mx-auto flex items-center justify-between">
+              
+              <div onClick={() => setTab('home')} className="cursor-pointer group flex items-center gap-3">
+                <img 
+                  src={LOGO_FILE_URI} 
+                  alt="Cargolith Dispatching Logo" 
+                  className="h-12 sm:h-14 w-auto object-contain transition-transform group-hover:scale-105"
+                  onError={(e) => {
+                    e.target.style.display = 'none';
+                    if (e.target.nextElementSibling) e.target.nextElementSibling.style.display = 'flex';
+                  }}
+                />
+                <div className="hidden items-center gap-2">
+                  <div className="w-10 h-10 rounded-xl bg-cargolith-navy text-white font-extrabold flex items-center justify-center text-lg">C</div>
+                  <div className="font-heading font-black text-lg text-cargolith-navy tracking-tight">CARGOLITH <span className="text-cargolith-blue font-bold text-xs">DISPATCH</span></div>
+                </div>
+              </div>
+
+              <nav className="hidden md:flex items-center gap-1.5 bg-slate-50 p-1.5 rounded-xl border border-slate-200">
+                {[
+                  { id: 'home', label: 'Home' },
+                  { id: 'loads', label: 'Live Load Board' },
+                  { id: 'calculator', label: 'Revenue Calculator' },
+                  { id: 'services', label: 'Services & Pricing' },
+                  { id: 'carriers', label: 'For Carriers' },
+                  { id: 'contact', label: 'Contact' },
+                ].map(item => (
+                  <button
+                    key={item.id}
+                    onClick={() => setTab(item.id)}
+                    className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${
+                      tab === item.id 
+                        ? 'bg-cargolith-navy text-white shadow-sm' 
+                        : 'text-slate-700 hover:text-cargolith-blue hover:bg-white'
+                    }`}
+                  >
+                    {item.label}
+                  </button>
+                ))}
+              </nav>
+
+              <div className="flex items-center gap-3">
+                <a href="tel:18005558782" className="hidden lg:block text-right">
+                  <span className="block text-[10px] text-slate-500 font-bold uppercase">Dispatch Desk</span>
+                  <span className="text-sm font-extrabold text-cargolith-navy">1-800-CARGOLITH</span>
+                </a>
+                <button 
+                  onClick={() => setTab('carriers')}
+                  className="btn-cargolith px-5 py-2.5 rounded-xl text-xs uppercase font-extrabold tracking-wider"
+                >
+                  Onboard Truck
+                </button>
+              </div>
+
+            </div>
+          </header>
+
+          <main className="flex-grow">
+            
+            {tab === 'home' && (
+              <div>
+                
+                <section className="bg-hero-radial pt-4 pb-20 px-4 sm:px-6 lg:px-8 border-b border-slate-100 relative">
+                  
+                  <div className="max-w-7xl mx-auto flex justify-end pt-2 pb-6">
+                    <CLDMonogramBadge />
+                  </div>
+
+                  <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                    
+                    <div className="lg:col-span-7 space-y-6 text-left">
+                      
+                      <div className="inline-block p-4 rounded-2xl bg-white border-2 border-slate-200 shadow-chrome">
+                        <img 
+                          src={LOGO_FILE_URI} 
+                          alt="Cargolith Dispatching Emblem" 
+                          className="h-20 sm:h-24 w-auto object-contain"
+                        />
+                      </div>
+
+                      <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-cargolith-blue text-xs font-bold uppercase tracking-wider">
+                        <span className="w-2 h-2 rounded-full bg-cargolith-blue"></span>
+                        <span>0% Upfront Contract • No Forced Dispatch</span>
+                      </div>
+
+                      <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-cargolith-darkNavy tracking-tight leading-[1.08] font-heading">
+                        Reliable Dispatch. <br />
+                        <span className="text-cargolith-blue">Smart Solutions.</span> <br />
+                        Maximum Results.
+                      </h1>
+
+                      <p className="text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl font-normal">
+                        We keep independent owner-operators and carrier fleets profitable with top-dollar load bookings, aggressive rate negotiation, and 24/7 dedicated dispatch support.
+                      </p>
+
+                      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-2">
+                        <button 
+                          onClick={() => setTab('carriers')}
+                          className="btn-cargolith px-8 py-4 rounded-xl text-sm font-extrabold uppercase tracking-wider text-center shadow-lg"
+                        >
+                          Partner With Us (0% Upfront)
+                        </button>
+                        <button 
+                          onClick={() => setTab('calculator')}
+                          className="btn-silver px-8 py-4 rounded-xl text-sm font-bold uppercase tracking-wider text-center"
+                        >
+                          Calculate Weekly Revenue
+                        </button>
+                      </div>
+
+                      <div className="pt-4 grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs text-slate-700 font-semibold border-t border-slate-200">
+                        <div className="flex items-center gap-2">
+                          <span className="text-cargolith-blue font-bold text-base">✓</span> DAT One Verified
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-cargolith-blue font-bold text-base">✓</span> FMCSA Compliant
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-cargolith-blue font-bold text-base">✓</span> 100% Rate Transparency
+                        </div>
+                      </div>
+
+                    </div>
+
+                    <div className="lg:col-span-5">
+                      <div className="card-cargolith p-6 sm:p-8 bg-white shadow-float space-y-6 border-2 border-slate-200">
+                        <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+                          <div>
+                            <span className="text-xs font-bold text-cargolith-blue uppercase tracking-wider block">Live Load Scouting Preview</span>
+                            <h3 className="text-lg font-bold text-cargolith-navy">Today's Featured Freight</h3>
+                          </div>
+                          <span className="px-2.5 py-1 rounded bg-emerald-50 text-emerald-700 text-xs font-bold border border-emerald-200">LIVE</span>
+                        </div>
+
+                        <div className="space-y-3">
+                          {liveLoads.slice(0, 3).map((load) => (
+                            <div key={load.id} className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 hover:border-cargolith-blue/40 transition-colors flex items-center justify-between text-xs">
+                              <div>
+                                <span className="font-extrabold text-cargolith-navy block text-sm">{load.origin} ➔ {load.dest}</span>
+                                <span className="text-slate-500 font-medium">{load.equip} • {load.miles} miles</span>
+                              </div>
+                              <div className="text-right">
+                                <span className="font-extrabold text-cargolith-blue font-mono text-base block">{load.rate}</span>
+                                <span className="text-emerald-700 font-bold text-[11px] bg-emerald-100/60 px-1.5 py-0.5 rounded">{load.rpm}</span>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+
+                        <button 
+                          onClick={() => setTab('loads')}
+                          className="w-full py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-cargolith-navy text-xs font-extrabold uppercase tracking-wider transition-colors border border-slate-300 flex items-center justify-center gap-2"
+                        >
+                          <span>Explore Active Load Board</span>
+                          <span>➔</span>
+                        </button>
+                      </div>
+                    </div>
+
+                  </div>
+                </section>
+
+                <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+                  <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
+                    <span className="text-xs font-bold text-cargolith-blue bg-blue-50 border border-blue-200 px-3.5 py-1 rounded-full uppercase tracking-widest">
+                      Built for Owner-Operators
+                    </span>
+                    <h2 className="text-3xl sm:text-4xl font-extrabold text-cargolith-darkNavy font-heading">
+                      Why Truck Drivers Choose Cargolith Dispatching
+                    </h2>
+                    <p className="text-slate-600 text-base">
+                      We treat your truck like our own business — securing maximum rate-per-mile while eliminating administrative headaches.
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    
+                    <div className="card-cargolith p-6 space-y-4">
+                      <div className="w-12 h-12 rounded-xl bg-blue-50 border border-blue-200 text-cargolith-blue flex items-center justify-center font-black text-xl">
+                        💰
+                      </div>
+                      <h3 className="text-lg font-bold text-cargolith-navy">No Upfront Fees</h3>
+                      <p className="text-xs text-slate-600 leading-relaxed">
+                        Zero signup charges or monthly retainer fees. We operate strictly on performance commission — we only get paid when you haul.
+                      </p>
+                    </div>
+
+                    <div className="card-cargolith p-6 space-y-4">
+                      <div className="w-12 h-12 rounded-xl bg-blue-50 border border-blue-200 text-cargolith-blue flex items-center justify-center font-black text-xl">
+                        📈
+                      </div>
+                      <h3 className="text-lg font-bold text-cargolith-navy">Top Rate Negotiation</h3>
+                      <p className="text-xs text-slate-600 leading-relaxed">
+                        Our seasoned dispatchers negotiate aggressively for above-market RPM, detention pay, layover compensation, and TONU fees.
+                      </p>
+                    </div>
+
+                    <div className="card-cargolith p-6 space-y-4">
+                      <div className="w-12 h-12 rounded-xl bg-blue-50 border border-blue-200 text-cargolith-blue flex items-center justify-center font-black text-xl">
+                        ⚡
+                      </div>
+                      <h3 className="text-lg font-bold text-cargolith-navy">15-Min Paperwork</h3>
+                      <p className="text-xs text-slate-600 leading-relaxed">
+                        Carrier packets, Ratecons, and Factoring NOA submissions processed in minutes. Stop sitting at truck stops doing paperwork.
+                      </p>
+                    </div>
+
+                    <div className="card-cargolith p-6 space-y-4">
+                      <div className="w-12 h-12 rounded-xl bg-blue-50 border border-blue-200 text-cargolith-blue flex items-center justify-center font-black text-xl">
+                        📞
+                      </div>
+                      <h3 className="text-lg font-bold text-cargolith-navy">Dedicated Dispatcher</h3>
+                      <p className="text-xs text-slate-600 leading-relaxed">
+                        Direct cell access to one single personal dispatcher who knows your preferred lanes, equipment specs, and home time needs.
+                      </p>
+                    </div>
+
+                  </div>
+                </section>
+
+                <section className="bg-slate-50 py-20 px-4 sm:px-6 lg:px-8 border-t border-slate-200">
+                  <div className="max-w-4xl mx-auto space-y-12">
+                    <div className="text-center space-y-3">
+                      <span className="text-xs font-bold text-cargolith-blue bg-blue-50 border border-blue-200 px-3 py-1 rounded-full uppercase tracking-widest">Got Questions?</span>
+                      <h2 className="text-3xl font-extrabold text-cargolith-navy font-heading">Frequently Asked Questions</h2>
+                    </div>
+
+                    <div className="space-y-4">
+                      {[
+                        { q: "Is there any upfront fee or setup cost?", a: "No. Cargolith has zero setup fees, zero subscription costs, and no monthly maintenance charges. We charge a simple percentage commission only after you haul." },
+                        { q: "Do you force dispatch?", a: "Never. You maintain 100% control over where you drive, when you take home time, and which loads you choose to haul. We negotiate, but you approve every Ratecon." },
+                        { q: "What documents do I need to onboard?", a: "To complete setup, you will need your active MC/USDOT Authority, Certificate of Insurance (COI naming your carrier), W-9 Form, and Notice of Assignment (if using factoring)." },
+                        { q: "How quickly can I get my first load?", a: "Our onboarding takes less than 10 minutes. Once your packet is confirmed, your dedicated dispatcher can book your first load within hours." }
+                      ].map((item, idx) => (
+                        <div key={idx} className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">
+                          <button
+                            onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
+                            className="w-full p-5 text-left font-bold text-cargolith-navy flex justify-between items-center text-sm hover:text-cargolith-blue"
+                          >
+                            <span>{item.q}</span>
+                            <span className="text-cargolith-blue font-extrabold text-lg">{openFaq === idx ? "−" : "+"}</span>
+                          </button>
+                          {openFaq === idx && (
+                            <div className="px-5 pb-5 text-xs text-slate-600 leading-relaxed border-t border-slate-100 pt-3">
+                              {item.a}
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </section>
+
+              </div>
+            )}
+
+            {tab === 'loads' && (
+              <div className="py-12 px-4 max-w-6xl mx-auto space-y-8">
+                <div className="text-center space-y-3">
+                  <span className="text-xs font-bold text-cargolith-blue bg-blue-50 border border-blue-200 px-3 py-1 rounded-full uppercase tracking-widest">Real-Time Freight Matching</span>
+                  <h2 className="text-3xl font-extrabold text-cargolith-navy font-heading">Active Freight Loads Available</h2>
+                  <p className="text-xs text-slate-600">Explore sample high-paying loads our dispatchers are currently booking for carriers.</p>
+                </div>
+
+                <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-card">
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left border-collapse text-xs">
+                      <thead>
+                        <tr className="bg-slate-50 text-slate-700 font-bold uppercase tracking-wider border-b border-slate-200">
+                          <th className="p-4">Load ID</th>
+                          <th className="p-4">Origin ➔ Destination</th>
+                          <th className="p-4">Equipment</th>
+                          <th className="p-4">Distance</th>
+                          <th className="p-4">Gross Payout</th>
+                          <th className="p-4">Rate / Mile</th>
+                          <th className="p-4">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-100 font-medium">
+                        {liveLoads.map((ld) => (
+                          <tr key={ld.id} className="hover:bg-blue-50/50 transition-colors">
+                            <td className="p-4 font-mono font-bold text-cargolith-navy">{ld.id}</td>
+                            <td className="p-4 font-bold text-cargolith-navy">{ld.origin} ➔ {ld.dest}</td>
+                            <td className="p-4 text-slate-600">{ld.equip}</td>
+                            <td className="p-4 text-slate-600">{ld.miles} mi</td>
+                            <td className="p-4 font-bold font-mono text-base text-cargolith-navy">{ld.rate}</td>
+                            <td className="p-4"><span className="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded font-bold">{ld.rpm}</span></td>
+                            <td className="p-4">
+                              <button 
+                                onClick={() => setTab('carriers')}
+                                className="btn-cargolith px-3.5 py-1.5 rounded-lg text-[11px] font-bold uppercase"
+                              >
+                                Book Load
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {tab === 'calculator' && (
+              <div className="py-12 px-4 max-w-4xl mx-auto">
+                <div className="card-cargolith p-8 sm:p-12 space-y-8 shadow-card">
+                  <div className="text-center space-y-2">
+                    <span className="text-xs font-bold text-cargolith-blue bg-blue-50 border border-blue-200 px-3 py-1 rounded-full uppercase tracking-widest">Revenue Estimator</span>
+                    <h2 className="text-3xl font-extrabold text-cargolith-navy font-heading">Calculate Your Weekly Truck Earnings</h2>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 bg-slate-50 p-6 rounded-2xl border border-slate-200">
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 uppercase mb-2">Select Equipment Type</label>
+                      <select 
+                        value={equipType} 
+                        onChange={e => setEquipType(e.target.value)}
+                        className="w-full bg-white border border-slate-300 rounded-xl p-3 text-sm font-bold text-cargolith-navy"
+                      >
+                        <option value="Dry Van">Dry Van ($2.85/mi)</option>
+                        <option value="Reefer">Reefer ($3.35/mi)</option>
+                        <option value="Flatbed">Flatbed ($3.50/mi)</option>
+                        <option value="Step Deck">Step Deck ($3.75/mi)</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 uppercase mb-2">Weekly Miles: {miles} mi</label>
+                      <input 
+                        type="range" 
+                        min="1000" 
+                        max="4500" 
+                        step="100" 
+                        value={miles} 
+                        onChange={e => setMiles(Number(e.target.value))}
+                        className="w-full accent-cargolith-blue mt-3"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
+                    <div className="p-5 rounded-2xl bg-blue-50 border border-blue-200">
+                      <span className="text-xs text-slate-500 uppercase font-bold block">Est. Weekly Gross</span>
+                      <span className="text-3xl font-black font-mono text-cargolith-navy">${grossRev.toLocaleString()}</span>
+                    </div>
+                    <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200">
+                      <span className="text-xs text-slate-500 uppercase font-bold block">5% Commission Fee</span>
+                      <span className="text-2xl font-bold font-mono text-slate-700">-${fee.toLocaleString()}</span>
+                    </div>
+                    <div className="p-5 rounded-2xl bg-emerald-50 border border-emerald-200">
+                      <span className="text-xs text-emerald-800 uppercase font-bold block">Est. Net Take-Home</span>
+                      <span className="text-3xl font-black font-mono text-emerald-700">${netTakeHome.toLocaleString()}</span>
+                    </div>
+                  </div>
+
+                  <div className="text-center pt-4">
+                    <button onClick={() => setTab('carriers')} className="btn-cargolith px-8 py-4 rounded-xl text-xs uppercase font-extrabold">
+                      Claim This Revenue Rate Now
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {tab === 'services' && (
+              <div className="py-12 px-4 max-w-5xl mx-auto space-y-12">
+                <div className="text-center space-y-3">
+                  <h2 className="text-3xl font-extrabold text-cargolith-navy font-heading">Transparent Dispatch Pricing</h2>
+                  <p className="text-slate-600 text-sm">No signup fees, no monthly software charges, no hidden lock-ins.</p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                  
+                  <div className="card-cargolith p-8 space-y-6">
+                    <h3 className="text-xl font-bold text-cargolith-navy">Owner-Op Flex</h3>
+                    <div className="text-4xl font-black text-cargolith-navy font-mono">6% <span className="text-xs font-normal text-slate-500">/ gross load</span></div>
+                    <p className="text-xs text-slate-600">Ideal for single owner-operators looking for maximum freedom and high RPM.</p>
+                    <ul className="space-y-2 text-xs text-slate-700">
+                      <li>✓ Dedicated Single Dispatcher</li>
+                      <li>✓ Top-Rate Negotiation</li>
+                      <li>✓ No Forced Dispatch</li>
+                      <li>✓ 24/7 Driver Support</li>
+                    </ul>
+                    <button onClick={() => setTab('carriers')} className="btn-silver w-full py-3 rounded-xl text-xs font-bold">Select Flex</button>
+                  </div>
+
+                  <div className="card-cargolith p-8 space-y-6 border-2 border-cargolith-blue shadow-chrome relative bg-blue-50/30">
+                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-cargolith-navy text-white text-[10px] font-black uppercase px-3 py-1 rounded-full">Most Popular</div>
+                    <h3 className="text-xl font-bold text-cargolith-navy">Dedicated Carrier</h3>
+                    <div className="text-4xl font-black text-cargolith-navy font-mono">5% <span className="text-xs font-normal text-slate-500">/ gross load</span></div>
+                    <p className="text-xs text-slate-600">For full-time carriers running consistent weekly lane capacity.</p>
+                    <ul className="space-y-2 text-xs text-slate-700">
+                      <li>✓ Everything in Flex Plan</li>
+                      <li>✓ Dedicated Lane Scouting</li>
+                      <li>✓ NOA Factoring Support</li>
+                      <li>✓ Priority Load Booking</li>
+                    </ul>
+                    <button onClick={() => setTab('carriers')} className="btn-cargolith w-full py-3 rounded-xl text-xs font-extrabold uppercase">Select Dedicated</button>
+                  </div>
+
+                  <div className="card-cargolith p-8 space-y-6">
+                    <h3 className="text-xl font-bold text-cargolith-navy">Fleet Partner</h3>
+                    <div className="text-4xl font-black text-cargolith-navy font-mono">4% <span className="text-xs font-normal text-slate-500">/ 3+ Trucks</span></div>
+                    <p className="text-xs text-slate-600">Volume dispatch for fleets running 3 to 25 power units.</p>
+                    <ul className="space-y-2 text-xs text-slate-700">
+                      <li>✓ Fleet Account Manager</li>
+                      <li>✓ Multi-Truck Rerouting</li>
+                      <li>✓ Custom Billing Summaries</li>
+                      <li>✓ Direct Shipper Line</li>
+                    </ul>
+                    <button onClick={() => setTab('carriers')} className="btn-silver w-full py-3 rounded-xl text-xs font-bold">Select Fleet</button>
+                  </div>
+
+                </div>
+              </div>
+            )}
+
+            {tab === 'carriers' && (
+              <div className="py-12 px-4 max-w-2xl mx-auto">
+                <div className="card-cargolith p-8 sm:p-10 shadow-float">
+                  <div className="text-center mb-8">
+                    <span className="text-xs font-bold text-cargolith-blue bg-blue-50 border border-blue-200 px-3 py-1 rounded-full uppercase tracking-widest">Quick Setup</span>
+                    <h2 className="text-3xl font-extrabold text-cargolith-navy font-heading mt-2">Carrier Onboarding Packet</h2>
+                  </div>
+
+                  {formSubmitted ? (
+                    <div className="text-center py-10 space-y-6">
+                      <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-700 border border-emerald-300 text-3xl flex items-center justify-center mx-auto">✓</div>
+                      <h3 className="text-2xl font-bold text-cargolith-navy">Onboarding Packet Submitted!</h3>
+                      <p className="text-slate-600 text-sm">Thank you <strong className="text-cargolith-navy">{formData.name}</strong> (MC# {formData.mc}). A senior dispatcher will contact you at <strong className="text-cargolith-navy">{formData.phone}</strong> within 15 minutes.</p>
+                      <button onClick={() => { setFormSubmitted(false); setStep(1); }} className="btn-cargolith px-6 py-3 rounded-xl text-xs font-extrabold uppercase">Submit Another Packet</button>
+                    </div>
+                  ) : (
+                    <form onSubmit={handleOnboardSubmit} className="space-y-5">
+                      
+                      <div className="flex items-center justify-between text-xs font-bold text-slate-500 mb-2">
+                        <span className={step >= 1 ? "text-cargolith-blue" : ""}>1. Carrier Details</span>
+                        <span className={step >= 2 ? "text-cargolith-blue" : ""}>2. Equipment & Lanes</span>
+                        <span className={step >= 3 ? "text-cargolith-blue" : ""}>3. Dispatch Contact</span>
+                      </div>
+                      <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden mb-6 border border-slate-200">
+                        <div className="bg-cargolith-blue h-full transition-all duration-300" style={{ width: `${(step / 3) * 100}%` }}></div>
+                      </div>
+
+                      {step === 1 && (
+                        <div className="space-y-4">
+                          <div>
+                            <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Company / Carrier Name *</label>
+                            <input 
+                              type="text" 
+                              required 
+                              placeholder="e.g. Vance Logistics LLC"
+                              value={formData.name} 
+                              onChange={e => setFormData({...formData, name: e.target.value})}
+                              className="w-full bg-white border border-slate-300 rounded-xl p-3 text-sm text-cargolith-navy focus:outline-none focus:border-cargolith-blue"
+                            />
+                          </div>
+                          <div className="grid grid-cols-2 gap-4">
+                            <div>
+                              <label className="block text-xs font-bold text-slate-700 uppercase mb-1">MC Number *</label>
+                              <input 
+                                type="text" 
+                                required 
+                                placeholder="MC-123456"
+                                value={formData.mc} 
+                                onChange={e => setFormData({...formData, mc: e.target.value})}
+                                className="w-full bg-white border border-slate-300 rounded-xl p-3 text-sm text-cargolith-navy focus:outline-none focus:border-cargolith-blue"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-xs font-bold text-slate-700 uppercase mb-1">USDOT Number *</label>
+                              <input 
+                                type="text" 
+                                required 
+                                placeholder="DOT-987654"
+                                value={formData.dot} 
+                                onChange={e => setFormData({...formData, dot: e.target.value})}
+                                className="w-full bg-white border border-slate-300 rounded-xl p-3 text-sm text-cargolith-navy focus:outline-none focus:border-cargolith-blue"
+                              />
+                            </div>
+                          </div>
+                          <button type="button" onClick={() => setStep(2)} className="btn-cargolith w-full py-3.5 rounded-xl text-xs font-extrabold uppercase mt-4">Next: Equipment & Lanes ➔</button>
+                        </div>
+                      )}
+
+                      {step === 2 && (
+                        <div className="space-y-4">
+                          <div>
+                            <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Equipment Type *</label>
+                            <select 
+                              value={formData.equip} 
+                              onChange={e => setFormData({...formData, equip: e.target.value})}
+                              className="w-full bg-white border border-slate-300 rounded-xl p-3 text-sm text-cargolith-navy"
+                            >
+                              <option value="Dry Van (53ft)">Dry Van (53ft)</option>
+                              <option value="Reefer / Temp Control">Reefer / Temperature Control</option>
+                              <option value="Flatbed / Stepdeck">Flatbed / Stepdeck</option>
+                              <option value="Power Only">Power Only</option>
+                            </select>
+                          </div>
+                          <div>
+                            <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Current Base Location *</label>
+                            <input 
+                              type="text" 
+                              required 
+                              placeholder="e.g. Chicago, IL"
+                              value={formData.location} 
+                              onChange={e => setFormData({...formData, location: e.target.value})}
+                              className="w-full bg-white border border-slate-300 rounded-xl p-3 text-sm text-cargolith-navy focus:outline-none focus:border-cargolith-blue"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Preferred Operating Lanes *</label>
+                            <input 
+                              type="text" 
+                              required 
+                              placeholder="e.g. Midwest to Southeast, Texas Regional"
+                              value={formData.lanes} 
+                              onChange={e => setFormData({...formData, lanes: e.target.value})}
+                              className="w-full bg-white border border-slate-300 rounded-xl p-3 text-sm text-cargolith-navy focus:outline-none focus:border-cargolith-blue"
+                            />
+                          </div>
+                          <div className="flex gap-3 pt-2">
+                            <button type="button" onClick={() => setStep(1)} className="btn-silver w-1/3 py-3.5 rounded-xl text-xs font-bold">Back</button>
+                            <button type="button" onClick={() => setStep(3)} className="btn-cargolith w-2/3 py-3.5 rounded-xl text-xs font-extrabold uppercase">Next: Contact Info ➔</button>
+                          </div>
+                        </div>
+                      )}
+
+                      {step === 3 && (
+                        <div className="space-y-4">
+                          <div>
+                            <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Dispatch Phone Number *</label>
+                            <input 
+                              type="tel" 
+                              required 
+                              placeholder="(555) 000-0000"
+                              value={formData.phone} 
+                              onChange={e => setFormData({...formData, phone: e.target.value})}
+                              className="w-full bg-white border border-slate-300 rounded-xl p-3 text-sm text-cargolith-navy focus:outline-none focus:border-cargolith-blue"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Email Address *</label>
+                            <input 
+                              type="email" 
+                              required 
+                              placeholder="dispatcher@company.com"
+                              value={formData.email} 
+                              onChange={e => setFormData({...formData, email: e.target.value})}
+                              className="w-full bg-white border border-slate-300 rounded-xl p-3 text-sm text-cargolith-navy focus:outline-none focus:border-cargolith-blue"
+                            />
+                          </div>
+                          <div className="p-3 bg-blue-50 rounded-xl border border-blue-200 text-[11px] text-cargolith-navy font-semibold">
+                            ✓ Zero setup fees • You approve all rates before booking • 100% rate transparency
+                          </div>
+                          <div className="flex gap-3 pt-2">
+                            <button type="button" onClick={() => setStep(2)} className="btn-silver w-1/3 py-3.5 rounded-xl text-xs font-bold">Back</button>
+                            <button type="submit" disabled={isSubmitting} className="btn-cargolith w-2/3 py-3.5 rounded-xl text-xs font-extrabold uppercase">
+                              {isSubmitting ? 'Submitting...' : 'Submit Carrier Packet ✓'}
+                            </button>
+                          </div>
+                        </div>
+                      )}
+
+                    </form>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {tab === 'contact' && (
+              <div className="py-12 px-4 max-w-xl mx-auto">
+                <div className="card-cargolith p-8 sm:p-10 text-center space-y-6 shadow-card">
+                  <span className="text-xs font-bold text-cargolith-blue bg-blue-50 border border-blue-200 px-3 py-1 rounded-full uppercase tracking-widest">24/7 Live Desk</span>
+                  <h2 className="text-3xl font-extrabold text-cargolith-navy font-heading">Direct Dispatch Line</h2>
+                  <p className="text-slate-600 text-sm">Call or message our senior dispatch team anytime.</p>
+
+                  <div className="p-6 bg-blue-50 rounded-2xl border border-blue-200 text-left space-y-2">
+                    <span className="text-xs text-cargolith-blue font-bold uppercase">Toll-Free Phone Desk</span>
+                    <div className="text-3xl font-black font-mono text-cargolith-navy">1-800-CARGOLITH</div>
+                    <p className="text-xs text-slate-500 font-medium">Dispatchers active 24 hours / 7 days a week</p>
+                  </div>
+
+                  <div className="p-6 bg-emerald-50 rounded-2xl border border-emerald-200 text-left space-y-2">
+                    <span className="text-xs text-emerald-800 font-bold uppercase">WhatsApp Direct Chat</span>
+                    <div className="text-lg font-bold text-cargolith-navy">Instant Dispatcher Messaging</div>
+                    <a href="https://wa.me/18005558782" target="_blank" className="btn-cargolith inline-block px-5 py-2 rounded-xl text-xs font-extrabold uppercase mt-2">Chat Now</a>
+                  </div>
+                </div>
+              </div>
+            )}
+
+          </main>
+
+          <footer className="bg-cargolith-darkNavy text-white py-12 px-4 border-t border-slate-800">
+            <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 text-xs">
+              <div className="space-y-4">
+                <img 
+                  src={LOGO_FILE_URI} 
+                  alt="Cargolith Dispatching" 
+                  className="h-16 w-auto object-contain bg-white p-2 rounded-xl"
+                />
+                <p className="text-cargolith-silver leading-relaxed">
+                  Reliable Dispatch. Smart Solutions. Maximum Results. Nationwide truck dispatch service for independent carriers.
+                </p>
+              </div>
+
+              <div>
+                <h4 className="font-bold text-white text-sm uppercase tracking-wider mb-3">Quick Navigation</h4>
+                <ul className="space-y-2 text-cargolith-silver">
+                  <li onClick={() => setTab('home')} className="hover:text-white cursor-pointer">• Home</li>
+                  <li onClick={() => setTab('loads')} className="hover:text-white cursor-pointer">• Live Load Board</li>
+                  <li onClick={() => setTab('calculator')} className="hover:text-white cursor-pointer">• Revenue Calculator</li>
+                  <li onClick={() => setTab('carriers')} className="hover:text-white cursor-pointer">• Carrier Onboarding</li>
+                </ul>
+              </div>
+
+              <div>
+                <h4 className="font-bold text-white text-sm uppercase tracking-wider mb-3">Equipment Handled</h4>
+                <ul className="space-y-2 text-cargolith-silver">
+                  <li>• Dry Van Dispatching</li>
+                  <li>• Reefer Temperature Control</li>
+                  <li>• Flatbed & Stepdeck</li>
+                  <li>• Power Only Hauling</li>
+                </ul>
+              </div>
+
+              <div>
+                <h4 className="font-bold text-white text-sm uppercase tracking-wider mb-3">Contact Desk</h4>
+                <p className="text-white font-bold">1-800-CARGOLITH</p>
+                <p className="text-cargolith-silver mt-1">dispatch@cargolith.com</p>
+                <p className="text-cargolith-silver mt-1">All 48 US States Coverage</p>
+              </div>
+            </div>
+
+            <div className="max-w-7xl mx-auto mt-8 pt-6 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between text-cargolith-darkSilver text-[11px]">
+              <div>© {new Date().getFullYear()} Cargolith Dispatching LLC. All rights reserved.</div>
+              <div className="flex gap-4">
+                <span>DAT Verified</span>
+                <span>FMCSA Registered</span>
+                <span>0% Upfront Contract</span>
+              </div>
+            </div>
+          </footer>
+
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>
